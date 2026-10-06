@@ -10,11 +10,11 @@ st.set_page_config(
 # --- CONFIGURACIÓN INICIAL DE ESTADOS ---
 if "votos" not in st.session_state:
   st.session_state.votos = {
-      "Candidata Aurora": 0,
-      "Candidata Atenea": 0,
-      "Candidata Milenio": 0,
-      "Candidata Futuro": 0,
-      "Candidata Sabiduría": 0,
+      "INÉS OCHOA PÉREZ": 0,
+      "ANA MERCEDES HOYOS MEJÍA": 0,
+      "JUANA MARÍA PEREA PLATA": 0,
+      "LUZ GABRIELA ARANGO GAVIRIA": 0,
+      "TERESA TANCO CORDOVEZ DE HERRERA": 0,
   }
 
 if "total_participantes" not in st.session_state:
@@ -37,25 +37,25 @@ with tab1:
 
   # Información de las candidatas (puedes cambiar los nombres o las fotos)
   candidatas_info = {
-      "Candidata Aurora": (
-          "Representa un nuevo comienzo.",
-          "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=300",
+      "INÉS OCHOA PÉREZ": (
+          "Educadora Colombiana.",
+          "candidata1.jpg",
       ),
-      "Candidata Atenea": (
-          "Símbolo de sabiduría e historia.",
-          "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=300",
+      "ANA MERCEDES HOYOS MEJÍA": (
+          "Pintora y Escultora.",
+          "candidata2.png",
       ),
-      "Candidata Milenio": (
-          "Mirada hacia la modernidad y el futuro.",
-          "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=300",
+      "JUANA MARÍA PEREA PLATA": (
+          "Lideresa social ambientalista.",
+          "candidata3.png",
       ),
-      "Candidata Futuro": (
-          "Innovación y liderazgo estudiantil.",
-          "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=300",
+      "LUZ GABRIELA ARANGO GAVIRIA": (
+          "Socióloga e Investigadora.",
+          "candidata4.png",
       ),
-      "Candidata Sabiduría": (
-          "Tradición y excelencia académica.",
-          "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=300",
+      "TERESA TANCO CORDOVEZ DE HERRERA": (
+          "Compositora y pianista.",
+          "candidata5.png",
       ),
   }
 
