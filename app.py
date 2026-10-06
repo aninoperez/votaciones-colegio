@@ -17,86 +17,70 @@ if "votos" not in st.session_state:
       "Candidata Sabiduría": 0,
   }
 
-if "codigos_usados" not in st.session_state:
-  st.session_state.codigos_usados = set()
+if "total_participantes" not in st.session_state:
+  st.session_state.total_participantes = 0
 
-TOTAL_ESTUDIANTES = 450
-
-
-def generar_codigos_validos():
-  return [f"EST-{i:03d}" for i in range(1, TOTAL_ESTUDIANTES + 1)]
-
-
-if "lista_codigos" not in st.session_state:
-  st.session_state.lista_codigos = generar_codigos_validos()
+TOTAL_ESTUDIANTES_META = 450
 
 # --- TÍTULO Y PRESENTACIÓN ---
 st.title("🗳️ Elección del Nuevo Nombre del Colegio")
 st.write(
-    "Participa de forma segura y secreta para elegir la nueva identidad de"
-    " nuestra institución."
+    "Selecciona tu opción favorita de manera libre y secreta. ¡Haz clic en"
+    " votar para registrar tu opinión!"
 )
 
-tab1, tab2 = st.tabs(["🎓 Zona de Votación", "🔒 Panel de Administración"])
+tab1, tab2 = st.tabs(["🎓 Zona de Votación (Estudiantes)", "🔒 Panel Docente"])
 
 # --- TAB 1: ZONA DE ESTUDIANTES ---
 with tab1:
-  st.subheader("Ingresa tu código de estudiante")
-  codigo_ingresado = st.text_input(
-      "Código (Ej: EST-001):", type="default", key="input_codigo"
+  st.subheader("Elige la nueva identidad del colegio")
+
+  # Información de las candidatas (puedes cambiar los nombres o las fotos)
+  candidatas_info = {
+      "Candidata Aurora": (
+          "Representa un nuevo comienzo.",
+          "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=300",
+      ),
+      "Candidata Atenea": (
+          "Símbolo de sabiduría e historia.",
+          "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=300",
+      ),
+      "Candidata Milenio": (
+          "Mirada hacia la modernidad y el futuro.",
+          "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=300",
+      ),
+      "Candidata Futuro": (
+          "Innovación y liderazgo estudiantil.",
+          "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=300",
+      ),
+      "Candidata Sabiduría": (
+          "Tradición y excelencia académica.",
+          "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=300",
+      ),
+  }
+
+  opcion_elegida = st.radio(
+      "Selecciona una de las opciones:", list(candidatas_info.keys())
   )
 
-  if codigo_ingresado:
-    codigo_limpio = codigo_ingresado.strip().upper()
+  # Mostrar la foto y descripción de la opción seleccionada
+  desc, foto_url = candidatas_info[opcion_elegida]
+  st.image(foto_url, width=300, caption=opcion_elegida)
+  st.info(f"💡 **Propuesta:** {desc}")
 
-    if codigo_limpio in st.session_state.codigos_usados:
-      st.error(
-          "❌ Este código ya ha sido utilizado. Solo se permite un voto por"
-          " estudiante."
-      )
-    elif codigo_limpio not in st.session_state.lista_codigos:
-      st.warning(
-          "⚠️ El código ingresado no es válido. Verifica con tu docente."
-      )
-    else:
-      st.success("✅ ¡Código válido! Selecciona tu opción favorita:")
+  st.divider()
 
-      candidatas_info = {
-          "Candidata Aurora": (
-              "Representa un nuevo comienzo.",
-              "https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=300",
-          ),
-          "Candidata Atenea": (
-              "Símbolo de sabiduría e historia.",
-              "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?w=300",
-          ),
-          "Candidata Milenio": (
-              "Mirada hacia la modernidad y el futuro.",
-              "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=300",
-          ),
-          "Candidata Futuro": (
-              "Innovación y liderazgo estudiantil.",
-              "https://images.unsplash.com/photo-1509062522246-3755977927d7?w=300",
-          ),
-          "Candidata Sabiduría": (
-              "Tradición y excelencia académica.",
-              "https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=300",
-          ),
-      }
-
-      opcion_elegida = st.radio(
-          "Elige una candidata:", list(candidatas_info.keys())
-      )
-
-      desc, foto_url = candidatas_info[opcion_elegida]
-      st.image(foto_url, width=300, caption=opcion_elegida)
-      st.info(f"💡 **Propuesta:** {desc}")
-
-      if st.button("Confirmar y Emitir Mi Voto 🗳️️", type="primary"):
-        st.session_state.votos[opcion_elegida] += 1
-        st.session_state.codigos_usados.add(codigo_limpio)
-        st.success("¡Tu voto ha sido registrado con éxito! Gracias por participar.")
-        st.balloons()
+  # Botón para emitir el voto de forma directa
+  if st.button("Confirmar y Registrar Mi Voto 🗳️️", type="primary"):
+    st.session_state.votos[opcion_elegida] += 1
+    st.session_state.total_participantes += 1
+    st.success(
+        "¡Voto registrado con éxito! Gracias, ya puedes pasar al siguiente"
+        " estudiante."
+    )
+    st.balloons()
+    # Opcional: recarga rápida para limpiar la pantalla para el siguiente alumno
+    st.rerun()
 
 # --- TAB 2: PANEL DE ADMINISTRACIÓN ---
 with tab2:
@@ -108,11 +92,15 @@ with tab2:
   if password == "colegio2026":
     st.success("Acceso de administrador concedido.")
 
-    total_votos_emitidos = len(st.session_state.codigos_usados)
-    porcentaje_participacion = (total_votos_emitidos / TOTAL_ESTUDIANTES) * 100
+    total_votos_emitidos = st.session_state.total_participantes
+    porcentaje_participacion = (
+        total_votos_emitidos / TOTAL_ESTUDIANTES_META
+    ) * 100
 
     col1, col2 = st.columns(2)
-    col1.metric("Votos Totales", f"{total_votos_emitidos} / {TOTAL_ESTUDIANTES}")
+    col1.metric(
+        "Votos Totales", f"{total_votos_emitidos} / {TOTAL_ESTUDIANTES_META}"
+    )
     col2.metric("Participación", f"{porcentaje_participacion:.2f}%")
 
     st.divider()
